@@ -19,7 +19,7 @@ ADD test_case.csv /app/
 
 # Adding OpenMessaging Benchmark
 RUN git clone https://github.com/acuevadell/benchmark.git /app/benchmark
-RUN cd /app/benchmark/ && mvn clean verify package -X -DskipTests -Dspotbugs.skip=true -Dlicense.skip=true
+RUN cd /app/benchmark/ && mvn clean verify package -X -DskipTests -Dspotbugs.skip=true -Dlicense.skip -Dcheckstyle.skip -Dspotless.check.skip -Djacoco.skip
 
 FROM registry.scontain.com/sconecuratedimages/apps:18-ea-jdk-alpine-scone5.9
 
