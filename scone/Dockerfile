@@ -18,10 +18,6 @@ ADD config_omb.py /app/
 ADD config_prb.py /app/
 ADD test_case.csv /app/
 
-# Adding Pravega Rust Benchmark
-RUN git clone https://github.com/neardata-eu/pravega-rust-benchmark.git /app/pravega-rust-benchmark
-RUN cd /app/pravega-rust-benchmark/ && scone cargo build --release
-
 # Adding OpenMessaging Benchmark
 RUN git clone https://github.com/acuevadell/benchmark.git /app/benchmark
 RUN cd /app/benchmark/ && mvn clean verify package -X -DskipTests -Dspotbugs.skip=true
