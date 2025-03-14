@@ -7,7 +7,7 @@ echo "Test_Case,Tool,Time,Messages" >> results/times.csv
 
 while IFS="," read -r Test_Case Production_Rate Environment Payload Size Messages Time
 do
-    echo "Executing $Test_Case in OMB"
+    echo -e "Executing $Test_Case in OMB"
     python3 config_omb.py $Test_Case $Production_Rate $Payload $Size > workload_var.yaml
     cd omb
     for i in {1..10}

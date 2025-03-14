@@ -5,7 +5,9 @@ ENV LANG=C.UTF-8
 RUN apk update && apk upgrade && apk add git maven
 RUN apk add vim
 RUN apk add python3
-RUN apk add python3-yaml
+RUN python3 -m ensurepip
+RUN python3 -m pip install --upgrade pip setuptools wheel
+RUN python3 -m pip install pyyaml
 
 ADD omb           /app/omb/
 ADD prb           /app/prb/
@@ -17,7 +19,7 @@ ADD test_case.csv /app/
 
 # Adding OpenMessaging Benchmark
 RUN git clone https://github.com/acuevadell/benchmark.git /app/benchmark
-RUN cd /app/benchmark/ && mvn clean verify package -X -DskipTests -Dspotbugs.skip=true
+RUN cd /app/benchmark/ && mvn clean verify package -X -DskipTests -Dspotbugs.skip=true -Dlicense.skip=true
 
 FROM registry.scontain.com/sconecuratedimages/apps:18-ea-jdk-alpine-scone5.9
 
