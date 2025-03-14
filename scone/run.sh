@@ -12,7 +12,7 @@ do
     cd omb
     for i in {1..10}
     do
-        echo "\t Executing $i for $Test_Case in OMB"
+        echo "\tExecuting $i for $Test_Case in OMB"
         START_TIME=$(date +%s)
         ./bin/benchmark ../workload_var.yaml --drivers ./dell/driver.yaml > output.txt
         END_TIME=$(date +%s)

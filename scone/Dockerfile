@@ -2,12 +2,10 @@ FROM alpine:3.18 AS builder
 
 ENV LANG=C.UTF-8
 
-RUN apt update && apt -y install git
 RUN apk update && apk upgrade && apk add git maven
-#RUN apt-get -y install openjdk-11-jre
-RUN apt-get -y install vim
-RUN apt-get -y install python3
-RUN apt-get -y install python3-yaml
+RUN apk add vim
+RUN apk add python3
+RUN apk add python3-yaml
 
 ADD omb           /app/omb/
 ADD prb           /app/prb/
