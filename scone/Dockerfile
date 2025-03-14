@@ -1,5 +1,4 @@
-#FROM ubuntu:24.04
-FROM registry.scontain.com/sconecuratedimages/crosscompilers:ubuntu
+FROM alpine:3.18 AS builder
 
 ENV LANG=C.UTF-8
 
@@ -23,6 +22,7 @@ RUN git clone https://github.com/acuevadell/benchmark.git /app/benchmark
 RUN cd /app/benchmark/ && mvn clean verify package -X -DskipTests -Dspotbugs.skip=true
 
 FROM registry.scontain.com/sconecuratedimages/apps:18-ea-jdk-alpine-scone5.9
+
 COPY --from=builder /omb/package/target/openmessaging-benchmark-0.0.1-SNAPSHOT-bin.tar.gz /
 RUN tar -xzvf openmessaging-benchmark-0.0.1-SNAPSHOT-bin.tar.gz
 
