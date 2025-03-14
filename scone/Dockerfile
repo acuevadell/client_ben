@@ -1,13 +1,13 @@
-FROM alpine:3.18 AS builder
+FROM ubuntu:24.04
 
-ENV LANG=C.UTF-8
-
-RUN apk update && apk upgrade && apk add git maven
-RUN apk add vim
-RUN apk add python3
-RUN python3 -m ensurepip
-RUN python3 -m pip install --upgrade pip setuptools wheel
-RUN python3 -m pip install pyyaml
+RUN apt-get -y update --allow-insecure-repositories
+RUN apt-get -y install openjdk-11-jre
+RUN java -version
+RUN apt-get -y install vim
+RUN apt-get -y install python3
+RUN apt-get -y install python3-yaml
+RUN apt-get -y install git
+RUN apt-get -y install maven
 
 ADD omb           /app/omb/
 ADD prb           /app/prb/
@@ -17,18 +17,11 @@ ADD config_omb.py /app/
 ADD config_prb.py /app/
 ADD test_case.csv /app/
 
-# Adding OpenMessaging Benchmark
-RUN git clone https://github.com/acuevadell/benchmark.git /app/benchmark
-RUN cd /app/benchmark/ && mvn clean verify package -X -DskipTests -Dspotbugs.skip=true -Dlicense.skip -Dcheckstyle.skip -Dspotless.check.skip -Djacoco.skip
+RUN git clone https://github.com/rcrane/om-benchmark.git ben
+RUN cd ben && mvn clean verify package -X -DskipTests -Dspotbugs.skip=true -Dlicense.skip -Dcheckstyle.skip -Dspotless.check.skip -Djacoco.skip
 
-FROM registry.scontain.com/sconecuratedimages/apps:18-ea-jdk-alpine-scone5.9
-
-COPY --from=builder /omb/package/target/openmessaging-benchmark-0.0.1-SNAPSHOT-bin.tar.gz /
-RUN tar -xzvf openmessaging-benchmark-0.0.1-SNAPSHOT-bin.tar.gz
-
-ENV SCONE_VERSION=1
-ENV SCONE_HEAP=12G
-ENV SCONE_LOG=DEBUG
+RUN mv /ben/package/target/openmessaging-benchmark-0.0.1-SNAPSHOT-bin.tar.gz /app/
+RUN cd /app/ && tar -xzvf openmessaging-benchmark-0.0.1-SNAPSHOT-bin.tar.gz
 
 WORKDIR /app
 ENTRYPOINT ["tail", "-f", "/dev/null"]
